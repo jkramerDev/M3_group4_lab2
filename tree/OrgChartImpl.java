@@ -47,7 +47,8 @@ public class OrgChartImpl implements OrgChart{
 	private void depthFirstTraversal(GenericTreeNode<Employee> node) {
 		if(node == null)
 			return;
-		System.out.println(node.getData().getName());
+		System.out.println("Name : " + node.getData().getName());
+		System.out.println("Id number : " + node.getData().getId());
 		for(GenericTreeNode<Employee> child : node.getChildren()) {
 			depthFirstTraversal(child);
 		}
@@ -59,7 +60,8 @@ public class OrgChartImpl implements OrgChart{
 		queue.add(root);
 		while(!queue.isEmpty()) {
 			GenericTreeNode<Employee> node = queue.poll();
-			System.out.println(node.getData().getName());
+			System.out.println("Name : " + node.getData().getName());
+			System.out.println("Id number : " + node.getData().getId());
 			for(GenericTreeNode<Employee> child : node.getChildren()) {
 				queue.add(child);
 			}
