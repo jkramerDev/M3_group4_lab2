@@ -9,7 +9,7 @@ public class DiGraphImpl implements DiGraph{
 	private List<GraphNode> nodeList = new ArrayList<>();
 	@Override
 	public Boolean addNode(GraphNode node) {
-		if(!nodeList.contains(node)) {
+		if(!nodeList.contains(node)) { 
 			nodeList.add(node);
 			return true;
 		}
