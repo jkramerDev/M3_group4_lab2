@@ -113,15 +113,85 @@ public class DiGraphImpl implements DiGraph{
         return null;
     }
 
-    @Override
-    public int fewestHops(GraphNode fromNode, GraphNode toNode) {
-        return 0;
+public int fewestHops(GraphNode fromNode, GraphNode toNode) {
+        if(fromNode == null || toNode == null || !nodeList.contains(fromNode) || !nodeList.contains(toNode)) {
+        	return -1;
+        }
+        Queue<GraphNode> queue = new LinkedList<>();
+        Set<GraphNode> visited = new HashSet<>();
+        Map<GraphNode, Integer> hops = new HashMap<>();
+        
+        queue.add(fromNode);
+        hops.put(fromNode, 0);
+        
+        while(!queue.isEmpty()) {
+        	GraphNode currentNode = queue.poll();
+        	visited.add(currentNode);
+        	
+        	if(currentNode == toNode) {
+        		return hops.get(currentNode);
+        	}
+        	for(GraphNode neighbor : currentNode.getNeighbors()) {
+        		if(!visited.contains(neighbor)) {
+        			queue.add(neighbor);
+        			hops.put(neighbor, hops.get(currentNode) + 1);
+        		}
+        	}
+        }
+        return -1;
     }
 
     @Override
     public int shortestPath(GraphNode fromNode, GraphNode toNode) {
-        return 0;
-    }
+        if(fromNode == null || toNode == null || !nodeList.contains(fromNode) || !nodeList.contains(toNode)) {
+        	return -1;
+        }
+        Map<GraphNode, Integer> distances = new HashMap<>();
+        Map<GraphNode, GraphNode> previousNodes = new HashMap<>();
+        Set<GraphNode> unvisitedNodes = new HashSet<>();
+        
+        for(GraphNode node : nodeList) {
+        	distances.put(node, Integer.MAX_VALUE);
+        	previousNodes.put(node, null);
+        	unvisitedNodes.add(node);
+        }
+        distances.put(fromNode, 0);
+        
+        while(!unvisitedNodes.isEmpty()) {
+        	GraphNode currentNode = null;
+        	int minDistance = Integer.MAX_VALUE;
+        	
+        	for(GraphNode node : unvisitedNodes) {
+        		if(distances.get(node) < minDistance) {
+        			minDistance = distances.get(node);
+        			currentNode = node;
+        		}
+        }
+        
+        if(currentNode == null)
+        	break;
+        	
+        unvisitedNodes.remove(currentNode);
+        
+        for(GraphNode neighbor : currentNode.getNeighbors()) {
+        	int newDistance = distances.get(currentNode) + currentNode.getDistanceToNeighbor(neighbor);
+        	if(newDistance < distances.get(neighbor)) {
+        		distances.put(neighbor, newDistance);
+        		previousNodes.put(neighbor, currentNode);
+        	}
+        }
+        }
+        
+    
+    	List<GraphNode> shortestPath = new ArrayList<>();
+    	GraphNode current = toNode;
+    	while(current != null) {
+    		shortestPath.add(current);
+    		current = previousNodes.get(current);
+    	}
+    	Collections.reverse(shortestPath);
+    	return shortestPath.size() -1;
+}
 }
 	
 	
@@ -129,4 +199,3 @@ public class DiGraphImpl implements DiGraph{
 
 	
 	
-}
